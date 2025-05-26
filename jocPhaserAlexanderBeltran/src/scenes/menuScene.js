@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 export default class menuScene extends Phaser.Scene {
     constructor() {
-        super('MainMenu');
+        super('menuScene');
     }
 
     create() {

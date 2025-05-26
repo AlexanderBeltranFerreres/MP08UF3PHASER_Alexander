@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 
-export default class primerMon extends Phaser.Scene {
+export default class segonMon extends Phaser.Scene {
     constructor() {
-        super('primerMon');
+        super('segonMon');
         this.player = null;
         this.enemics = null;
         this.plataformes = null;
@@ -50,59 +50,6 @@ export default class primerMon extends Phaser.Scene {
         this.punts = 0;
 
         this.add.tileSprite(0, 0, 3200, 600, 'background').setOrigin(0).setScrollFactor(0);
-
-        // Crear un fons negre semitransparent
-        const graphics = this.add.graphics();
-        graphics.fillStyle(0x000000, 0.7); // negre 70% opacitat
-        graphics.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
-
-        // Text controls
-        const controlsText =
-            'Controls:\n\n' +
-            '➡️⬅️ Fletxes per moure\'s\n' +
-            'G per atacar\n' +
-            'Espai per saltar';
-
-        // centrar text
-        const text = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, controlsText, {
-            fontFamily: 'Arial',
-            fontSize: '28px',
-            color: '#ffffff',
-            align: 'center',
-            stroke: '#000000',
-            strokeThickness: 4,
-            lineSpacing: 10,
-        });
-        text.setOrigin(0.5);
-
-        // Agrupar fons i text en un container per poder manipular-ho més fàcil
-        this.controlsContainer = this.add.container(0, 0, [graphics, text]);
-
-        // Fer que desaparegui al prémer qualsevol tecla o després de 5s
-        this.input.keyboard.once('keydown', () => {
-            this.tweens.add({
-                targets: this.controlsContainer,
-                alpha: 0,
-                duration: 500,
-                onComplete: () => {
-                    this.controlsContainer.destroy();
-                }
-            });
-        });
-
-        // Timeout que elimina el text automàticament després de 5 segons
-        this.time.delayedCall(5000, () => {
-            if (this.controlsContainer) {
-                this.tweens.add({
-                    targets: this.controlsContainer,
-                    alpha: 0,
-                    duration: 500,
-                    onComplete: () => {
-                        this.controlsContainer.destroy();
-                    }
-                });
-            }
-        });
 
         this.plataformes = this.physics.add.staticGroup();
         [
