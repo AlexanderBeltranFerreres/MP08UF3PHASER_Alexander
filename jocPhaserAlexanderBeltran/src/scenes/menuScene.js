@@ -1,18 +1,20 @@
 import Phaser from 'phaser';
+import musicaFons from '../../public/assets/audio/musicaFons.mp3';
 
 export default class menuScene extends Phaser.Scene {
     constructor() {
         super('menuScene');
     }
     preload() {
-        this.load.audio('bgMusic', 'assets/audio/musicaFons.mp3');
+       // this.load.audio('bgMusic', 'assets/audio/musicaFons.mp3');
+        this.load.audio('bgMusic1', musicaFons);
     }
 
     create() {
         this.preload();
         //this.load.audio('bgMusic', 'assets/audio/musicaFons.mp3');
-        if (!this.sound.get('bgMusic')) {
-            const music = this.sound.add('bgMusic', {
+        if (!this.sound.get('bgMusic1')) {
+            const music = this.sound.add('bgMusic1', {
                 loop: true,
                 volume: 1
             });
