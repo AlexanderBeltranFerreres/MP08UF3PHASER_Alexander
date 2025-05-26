@@ -9,8 +9,7 @@ export default class menuScene extends Phaser.Scene {
     }
 
     create() {
-        this.preload();
-        //this.load.audio('bgMusic', 'assets/audio/musicaFons.mp3');
+
         if (!this.sound.get('bgMusic')) {
             const music = this.sound.add('bgMusic', {
                 loop: true,
@@ -19,16 +18,13 @@ export default class menuScene extends Phaser.Scene {
             music.play();
             music.setLoop(true);
             music.config = { muteOnPause: false }; // Evita que es pari en pausa
-
-            // MARCAR COM A GLOBAL
-           // this.sound._sounds.push(music); // Ens assegurem que sigui global
         }
 
-        // Fons sòlid blau fosc
-        this.add.rectangle(400, 300, 800, 600, 0x141e30);
+        // Fons sòlid que ocupa tota la pantalla
+        this.add.rectangle(this.scale.width / 2, this.scale.height / 2, this.scale.width, this.scale.height, 0x141e30);
 
         // Títol principal
-        this.add.text(400, 140, 'THE CEGARRO HUNTER', {
+        this.add.text(this.scale.width / 2, this.scale.height * 0.2, 'THE CEGARRO HUNTER', {
             fontFamily: 'Arial',
             fontSize: '56px',
             fontWeight: 'bold',
@@ -39,7 +35,7 @@ export default class menuScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // Subtítols
-        this.add.text(400, 210, 'By Alexander Beltran', {
+        this.add.text(this.scale.width / 2, this.scale.height * 0.3, 'By Alexander Beltran', {
             fontFamily: 'Arial',
             fontSize: '24px',
             color: '#fff',
@@ -47,7 +43,7 @@ export default class menuScene extends Phaser.Scene {
             shadow: { offsetX: 2, offsetY: 2, color: '#000', blur: 4 }
         }).setOrigin(0.5);
 
-        this.add.text(400, 240, 'Joc Phaser MP08 UF3', {
+        this.add.text(this.scale.width / 2, this.scale.height * 0.35, 'Joc Phaser MP08 UF3', {
             fontFamily: 'Arial',
             fontSize: '18px',
             color: '#ccc',
@@ -57,7 +53,7 @@ export default class menuScene extends Phaser.Scene {
 
         // Funció per crear botons estilitzats
         const createButton = (y, text, baseColor, hoverColor, callback) => {
-            const btn = this.add.text(400, y, text, {
+            const btn = this.add.text(this.scale.width / 2, y, text, {
                 fontFamily: 'Arial',
                 fontSize: '34px',
                 color: baseColor,
@@ -81,7 +77,7 @@ export default class menuScene extends Phaser.Scene {
             return btn;
         };
 
-        createButton(350, 'NIVELL 1', '#00cc00', '#33ff33', () => this.scene.start('primerMon'));
-        createButton(410, 'NIVELL 2', '#ff9900', '#ffbb33', () => this.scene.start('segonMon'));
+        createButton(this.scale.height * 0.5, 'NIVELL 1', '#00cc00', '#33ff33', () => this.scene.start('primerMon'));
+        createButton(this.scale.height * 0.6, 'NIVELL 2', '#ff9900', '#ffbb33', () => this.scene.start('segonMon'));
     }
 }

@@ -7,11 +7,11 @@ import vicotria from "./scenes/victoria.js";
 
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
+    width: window.innerWidth,
+    height: window.innerHeight,
     scale: {
-        mode: Phaser.Scale.FIT,         // Escala per ajustar a la finestra
-        autoCenter: Phaser.Scale.CENTER_BOTH // Centra automàticament
+        mode: Phaser.Scale.RESIZE,             // Ajusta automàticament al tamany de la finestra
+        autoCenter: Phaser.Scale.CENTER_BOTH   // Centra el canvas
     },
     audio: {
         disableWebAudio: false,
@@ -26,14 +26,19 @@ const config = {
         }
     },
     scene: [menuScene, primerMon, gameOver, segonMon, vicotria],
-    plugins: {
-        global: [{
-            key: 'PhaserSound',
-            plugin: Phaser.Sound.WebAudioSoundManager,
-            mapping: 'sound',
-            start: true
-        }]
-    }
+    // plugins: {
+    //     global: [{
+    //         key: 'PhaserSound',
+    //         plugin: Phaser.Sound.WebAudioSoundManager,
+    //         mapping: 'sound',
+    //         start: true
+    //     }]
+    // }
 };
 
-new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+// Redimensiona el joc quan la finestra canvia de mida
+window.addEventListener('resize', () => {
+    game.scale.resize(window.innerWidth, window.innerHeight);
+});

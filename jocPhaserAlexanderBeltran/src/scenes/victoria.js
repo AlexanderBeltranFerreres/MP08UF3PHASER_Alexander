@@ -6,8 +6,8 @@ export default class victoria extends Phaser.Scene {
     }
 
     create() {
-        const width = this.cameras.main.width;
-        const height = this.cameras.main.height;
+        const width = this.scale.width;
+        const height = this.scale.height;
 
         // Fons semi transparent fosc
         this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.7);
