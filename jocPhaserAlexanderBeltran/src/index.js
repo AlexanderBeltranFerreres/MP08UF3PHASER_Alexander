@@ -3,6 +3,7 @@ import menuScene from './scenes/menuScene.js';
 import primerMon from './scenes/primerMon.js';
 import gameOver from './scenes/gameOver.js';
 import segonMon from "./scenes/segonMon.js";
+import vicotria from "./scenes/victoria.js";
 
 const config = {
     type: Phaser.AUTO,
@@ -20,7 +21,7 @@ const config = {
             debug: false
         }
     },
-    scene: [menuScene, primerMon, gameOver, segonMon]
+    scene: [menuScene, primerMon, gameOver, segonMon, vicotria]
 };
 
 new Phaser.Game(config);

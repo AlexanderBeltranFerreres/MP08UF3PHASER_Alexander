@@ -209,9 +209,25 @@ export default class primerMon extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, 3200, 600);
         this.physics.world.setBounds(0, 0, 3200, 600);
 
-        // textos
-        this.puntsText = this.add.text(16, 16, 'NICOTINA: 0', { fontSize: '24px', fill: '#fff' }).setScrollFactor(0);
-        this.videsText = this.add.text(16, 48, 'Vides: 3', { fontSize: '24px', fill: '#fff' }).setScrollFactor(0);
+
+        const textStyle = {
+            fontFamily: 'Segoe UI',
+            fontSize: '24px',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 4,
+            shadow: {
+                offsetX: 2,
+                offsetY: 2,
+                color: '#000000',
+                blur: 4,
+                stroke: true,
+                fill: true
+            }
+        };
+
+        this.puntsText = this.add.text(16, 16, 'NICOTINA: 0', textStyle).setScrollFactor(0);
+        this.videsText = this.add.text(16, 48, 'VIDES: 3 💚', textStyle).setScrollFactor(0);
 
         this.player.on('animationcomplete-attack', () => this.isAttacking = false);
         this.player.on('animationcomplete-death', () => this.isAttacking = false);

@@ -25,6 +25,10 @@ export default class segonMon extends Phaser.Scene {
         this.load.image('platforma', 'assets/plataformes/plataforma.png');
         this.load.image('cigarro', 'assets/objects/NBG_Cigarro.png');
         this.load.image('portal', 'assets/objects/NBK_Portal.png');
+        this.load.image('punxaMetalGran', 'assets/objects/long_metal_spike.png');
+        this.load.image('punxaFustaPetita', 'assets/objects/small_wood_spike.png');
+        this.load.image('agenciaTributaria', 'assets/objects/agencia_tributaria.png');
+
 
         // Player
         this.load.spritesheet('estatic', 'assets/personatge/noBKG_KnightIdle_strip.png', { frameWidth: 64, frameHeight: 64 });
@@ -51,6 +55,59 @@ export default class segonMon extends Phaser.Scene {
 
         this.add.tileSprite(0, 0, 3200, 600, 'background').setOrigin(0).setScrollFactor(0);
 
+        // Crear un fons negre semitransparent
+        const graphics = this.add.graphics();
+        graphics.fillStyle(0x000000, 0.7); // negre 70% opacitat
+        graphics.fillRect(0, 0, this.cameras.main.width, this.cameras.main.height);
+
+        // Text controls
+        const controlsText =
+            'Controls:\n\n' +
+            '➡️⬅️ Fletxes per moure\'s\n' +
+            'G per atacar\n' +
+            'Espai per saltar';
+
+        // centrar text
+        const text = this.add.text(this.cameras.main.centerX, this.cameras.main.centerY, controlsText, {
+            fontFamily: 'Arial',
+            fontSize: '28px',
+            color: '#ffffff',
+            align: 'center',
+            stroke: '#000000',
+            strokeThickness: 4,
+            lineSpacing: 10,
+        });
+        text.setOrigin(0.5);
+
+        // Agrupar fons i text en un container per poder manipular-ho més fàcil
+        this.controlsContainer = this.add.container(0, 0, [graphics, text]);
+
+        // Fer que desaparegui al prémer qualsevol tecla o després de 5s
+        this.input.keyboard.once('keydown', () => {
+            this.tweens.add({
+                targets: this.controlsContainer,
+                alpha: 0,
+                duration: 500,
+                onComplete: () => {
+                    this.controlsContainer.destroy();
+                }
+            });
+        });
+
+        // Timeout que elimina el text automàticament després de 5 segons
+        this.time.delayedCall(5000, () => {
+            if (this.controlsContainer) {
+                this.tweens.add({
+                    targets: this.controlsContainer,
+                    alpha: 0,
+                    duration: 500,
+                    onComplete: () => {
+                        this.controlsContainer.destroy();
+                    }
+                });
+            }
+        });
+
         this.plataformes = this.physics.add.staticGroup();
         [
             { x: 400, y: 580 }, { x: 800, y: 500 }, { x: 1200, y: 420 },
@@ -59,6 +116,27 @@ export default class segonMon extends Phaser.Scene {
             this.plataformes.create(p.x, p.y, 'platforma').setScale(0.3).refreshBody();
 
         });
+
+        this.punxes = this.physics.add.staticGroup();
+        const punxesData = [
+            { x: 400, y: 540, key: 'punxaFustaPetita' },     // damunt plataforma
+            { x: 800, y: 460, key: 'agenciaTributaria' },
+            { x: 1200, y: 380, key: 'punxaMetalGran' },
+            { x: 1600, y: 300, key: 'agenciaTributaria' },
+            { x: 2000, y: 240, key: 'punxaFustaPetita' },
+            { x: 2400, y: 180, key: 'agenciaTributaria' },
+            { x: 2800, y: 120, key: 'punxaMetalGran' },
+        ];
+        punxesData.forEach(p => {
+            const punxa = this.punxes.create(p.x, p.y, p.key);
+            if (p.key === 'agenciaTributaria') {
+                punxa.setScale(0.17);
+            } else {
+                punxa.setScale(0.5);
+            }
+            punxa.refreshBody();
+        });
+
 
         this.player = this.physics.add.sprite(100, 450, 'estatic').setCollideWorldBounds(true);
 
@@ -132,7 +210,7 @@ export default class segonMon extends Phaser.Scene {
 
         this.physics.add.collider(this.enemics, this.plataformes);
         this.physics.add.overlap(this.player, this.enemics, this.enemicAtacaJug, null, this);
-
+        this.physics.add.overlap(this.player, this.punxes, this.tocarPunxa, null, this);
         // Detectar col·lisió de la zona d'atac amb enemics
         this.physics.add.overlap(this.hitboxAtacJug, this.enemics, this.atacarEnemic, null, this);
 
@@ -157,8 +235,24 @@ export default class segonMon extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, 3200, 600);
 
         // textos
-        this.puntsText = this.add.text(16, 16, 'NICOTINA: 0', { fontSize: '24px', fill: '#fff' }).setScrollFactor(0);
-        this.videsText = this.add.text(16, 48, 'Vides: 3', { fontSize: '24px', fill: '#fff' }).setScrollFactor(0);
+        const textStyle = {
+            fontFamily: 'Segoe UI',
+            fontSize: '24px',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 4,
+            shadow: {
+                offsetX: 2,
+                offsetY: 2,
+                color: '#000000',
+                blur: 4,
+                stroke: true,
+                fill: true
+            }
+        };
+
+        this.puntsText = this.add.text(16, 16, 'NICOTINA: 0', textStyle).setScrollFactor(0);
+        this.videsText = this.add.text(16, 48, 'VIDES: 3 💚', textStyle).setScrollFactor(0);
 
         this.player.on('animationcomplete-attack', () => this.isAttacking = false);
         this.player.on('animationcomplete-death', () => this.isAttacking = false);
@@ -295,7 +389,7 @@ export default class segonMon extends Phaser.Scene {
     }
 
     enterPortal() {
-        this.scene.start('segonMon');
+        this.scene.start('victoria');
     }
 
     enemicAtacaJug(player, enemic) {
@@ -361,4 +455,26 @@ export default class segonMon extends Phaser.Scene {
             }
         });
     }
+
+    tocarPunxa(player, punxa) {
+        if (!this.invulnerable) { // per a no perdre totes les vides
+            this.vides--;
+            this.videsText.setText('Vides: ' + this.vides);
+
+            this.invulnerable = true;
+            this.player.setTint(0xff0000);
+            this.time.delayedCall(1000, () => {
+                this.invulnerable = false;
+                this.player.clearTint();
+            });
+
+            if (this.vides <= 0) {
+                this.player.play('death');
+                this.time.delayedCall(1500, () => {
+                    this.scene.start('gameOver', { punts: this.punts });
+                });
+            }
+        }
+    }
+
 }
