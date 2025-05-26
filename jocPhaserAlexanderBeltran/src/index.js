@@ -13,6 +13,10 @@ const config = {
         mode: Phaser.Scale.FIT,         // Escala per ajustar a la finestra
         autoCenter: Phaser.Scale.CENTER_BOTH // Centra automàticament
     },
+    audio: {
+        disableWebAudio: false,
+        noAudio: false
+    },
     backgroundColor: '#222',
     physics: {
         default: 'arcade',
@@ -21,7 +25,15 @@ const config = {
             debug: false
         }
     },
-    scene: [menuScene, primerMon, gameOver, segonMon, vicotria]
+    scene: [menuScene, primerMon, gameOver, segonMon, vicotria],
+    plugins: {
+        global: [{
+            key: 'PhaserSound',
+            plugin: Phaser.Sound.WebAudioSoundManager,
+            mapping: 'sound',
+            start: true
+        }]
+    }
 };
 
 new Phaser.Game(config);

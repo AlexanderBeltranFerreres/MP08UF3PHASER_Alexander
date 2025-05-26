@@ -21,6 +21,7 @@ export default class primerMon extends Phaser.Scene {
     }
 
     preload() {
+        //this.load.audio('musicaFons', 'assets/audio/musicaFons.mp3');
         this.load.image('background', 'assets/background/background.png');
         this.load.image('platforma', 'assets/plataformes/plataforma.png');
         this.load.image('cigarro', 'assets/objects/NBG_Cigarro.png');
@@ -48,6 +49,11 @@ export default class primerMon extends Phaser.Scene {
         this.vides = 3;
         this.invulnerable = false;
         this.punts = 0;
+        // this.musica = this.sound.add('musicaFons', {
+        //     volume: 0.5,
+        //     loop: true
+        // });
+        // this.musica.play();
 
         this.add.tileSprite(0, 0, 3200, 600, 'background').setOrigin(0).setScrollFactor(0);
 

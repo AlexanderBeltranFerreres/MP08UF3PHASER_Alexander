@@ -4,8 +4,26 @@ export default class menuScene extends Phaser.Scene {
     constructor() {
         super('menuScene');
     }
+    preload() {
+        this.load.audio('bgMusic', 'assets/audio/musicaFons.mp3');
+    }
 
     create() {
+        this.preload();
+        //this.load.audio('bgMusic', 'assets/audio/musicaFons.mp3');
+        if (!this.sound.get('bgMusic')) {
+            const music = this.sound.add('bgMusic', {
+                loop: true,
+                volume: 1
+            });
+            music.play();
+            music.setLoop(true);
+            music.config = { muteOnPause: false }; // Evita que es pari en pausa
+
+            // MARCAR COM A GLOBAL
+           // this.sound._sounds.push(music); // Ens assegurem que sigui global
+        }
+
         // Fons sòlid blau fosc
         this.add.rectangle(400, 300, 800, 600, 0x141e30);
 
